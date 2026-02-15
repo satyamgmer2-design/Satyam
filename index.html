@@ -1,120 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trusted Portal</title>
+<title>Animated Unlock System</title>
 
 <style>
 body{
     margin:0;
-    background:#0f0f0f;
-    font-family:Arial, sans-serif;
+    font-family:Arial;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
     color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-.box{
-    width:90%;
-    max-width:420px;
-    background:#1a1a1a;
-    padding:25px;
     text-align:center;
-    border-radius:12px;
-    box-shadow:0 0 30px #00ffcc;
+    overflow:hidden;
 }
 
-h1{
-    margin-bottom:10px;
+/* Fade Animation */
+.page{
+    display:none;
+    padding-top:80px;
+    animation:fadeIn 0.6s ease-in-out;
 }
 
-#count{
-    font-size:45px;
-    margin:15px 0;
-    color:#ff4444;
+@keyframes fadeIn{
+    from{opacity:0; transform:scale(0.95);}
+    to{opacity:1; transform:scale(1);}
+}
+
+.ad-box{
+    width:90%;
+    max-width:350px;
+    height:150px;
+    margin:20px auto;
+    background:linear-gradient(45deg,#ff00cc,#3333ff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:15px;
+    box-shadow:0 0 25px cyan;
+    font-size:20px;
 }
 
 .btn{
-    display:block;
-    padding:14px;
-    margin:12px 0;
-    text-decoration:none;
-    font-weight:bold;
-    border-radius:8px;
-    transition:0.3s;
-}
-
-.youtube{
-    background:#ff0000;
-    color:white;
-}
-
-.insta{
-    background:#e1306c;
-    color:white;
-}
-
-.download{
-    background:#00ffcc;
-    color:black;
+    padding:12px 30px;
+    border:none;
+    border-radius:25px;
+    background:cyan;
+    font-size:16px;
+    cursor:pointer;
+    margin:10px;
+    transition:0.2s;
     display:none;
+}
+
+/* Button Tap Animation */
+.btn:active{
+    transform:scale(0.9);
+    box-shadow:0 0 35px white;
+}
+
+#count{
+    font-size:35px;
+    margin-top:20px;
+    color:#ff4444;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-    <h1>🔐 Secure Download</h1>
+<div id="count"></div>
 
-    <div id="count">10</div>
-    <div id="status">Please wait...</div>
+<!-- STEP 1-5 ADS -->
+<div id="page1" class="page" style="display:block;"><div class="ad-box">Ad 1</div><button class="btn" onclick="tapEffect();nextPage(2)">Next</button></div>
+<div id="page2" class="page"><div class="ad-box">Ad 2</div><button class="btn" onclick="tapEffect();nextPage(3)">Next</button></div>
+<div id="page3" class="page"><div class="ad-box">Ad 3</div><button class="btn" onclick="tapEffect();nextPage(4)">Next</button></div>
+<div id="page4" class="page"><div class="ad-box">Ad 4</div><button class="btn" onclick="tapEffect();nextPage(5)">Next</button></div>
+<div id="page5" class="page"><div class="ad-box">Ad 5</div><button class="btn" onclick="tapEffect();nextPage(6)">Continue</button></div>
 
-    <a href="https://www.youtube.com/@TrustedPanelHub" target="_blank" class="btn youtube">
-        Subscribe YouTube
+<!-- STEP 6 SOCIAL -->
+<div id="page6" class="page">
+    <h2>Subscribe & Follow</h2>
+
+    <a href="https://www.youtube.com/@TrustedPanelHub" target="_blank">
+        <button class="btn" style="display:inline-block;background:red;color:white;" onclick="tapEffect()">YouTube</button>
     </a>
 
-    <a href="https://www.instagram.com/rankpusher.pro" target="_blank" class="btn insta">
-        Follow Instagram
+    <a href="https://www.instagram.com/rankpusher.pro" target="_blank">
+        <button class="btn" style="display:inline-block;background:#e1306c;color:white;" onclick="tapEffect()">Instagram</button>
     </a>
 
-    <a href="https://www.mediafire.com/file/czu096nnl8q3h1w/drip+client+regedit+store2.0.apk/file"
-       target="_blank"
-       id="download"
-       class="btn download">
-        ⬇ DOWNLOAD NOW
-    </a>
+    <br>
+    <button class="btn" style="display:inline-block;" onclick="tapEffect();nextPage(7)">
+        Continue
+    </button>
 </div>
 
+<!-- STEP 7 DOWNLOAD -->
+<div id="page7" class="page">
+    <h2>✅ All Steps Completed</h2>
+    <button class="btn" style="display:inline-block;" onclick="tapEffect();goDownload()">
+        📥 Download Now
+    </button>
+</div>
+
+<!-- Click Sound -->
+<audio id="clickSound">
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7d88dbb19f.mp3?filename=click-124467.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-let time = 10;
-let count = document.getElementById("count");
-let status = document.getElementById("status");
+let currentPage = 1;
 
-let timer = setInterval(function(){
-    time--;
-    count.innerText = time;
+function startCountdown(){
+    let time = 5;
+    let count = document.getElementById("count");
+    let btn = document.querySelector("#page"+currentPage+" .btn");
 
-    if(time == 7){
-        status.innerText = "Scanning...";
+    btn.style.display = "none";
+    count.innerText = "Wait " + time + " seconds";
+
+    let timer = setInterval(function(){
+        time--;
+        count.innerText = "Wait " + time + " seconds";
+
+        if(time <= 0){
+            clearInterval(timer);
+            count.innerText = "";
+            btn.style.display = "inline-block";
+        }
+    },1000);
+}
+
+function nextPage(pageNum){
+    document.getElementById("page"+currentPage).style.display="none";
+    currentPage = pageNum;
+    document.getElementById("page"+currentPage).style.display="block";
+
+    if(currentPage <= 5){
+        startCountdown();
     }
+}
 
-    if(time == 4){
-        status.innerText = "Verifying...";
-    }
+function goDownload(){
+    window.location.href="https://t.me/akashrexsutup/10";
+}
 
-    if(time <= 0){
-        clearInterval(timer);
-        count.style.display="none";
-        status.innerText="✅ Access Granted";
-        document.getElementById("download").style.display="block";
-    }
+function tapEffect(){
+    document.getElementById("clickSound").play();
+}
 
-},1000);
+startCountdown();
 </script>
 
 </body>
-</html>
+    </html>
