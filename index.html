@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trusted Portal</title>
+
+<style>
+body{
+    margin:0;
+    background:#0f0f0f;
+    font-family:Arial, sans-serif;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.box{
+    width:90%;
+    max-width:420px;
+    background:#1a1a1a;
+    padding:25px;
+    text-align:center;
+    border-radius:12px;
+    box-shadow:0 0 30px #00ffcc;
+}
+
+h1{
+    margin-bottom:10px;
+}
+
+#count{
+    font-size:45px;
+    margin:15px 0;
+    color:#ff4444;
+}
+
+.btn{
+    display:block;
+    padding:14px;
+    margin:12px 0;
+    text-decoration:none;
+    font-weight:bold;
+    border-radius:8px;
+    transition:0.3s;
+}
+
+.youtube{
+    background:#ff0000;
+    color:white;
+}
+
+.insta{
+    background:#e1306c;
+    color:white;
+}
+
+.download{
+    background:#00ffcc;
+    color:black;
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>🔐 Secure Download</h1>
+
+    <div id="count">10</div>
+    <div id="status">Please wait...</div>
+
+    <a href="https://www.youtube.com/@TrustedPanelHub" target="_blank" class="btn youtube">
+        Subscribe YouTube
+    </a>
+
+    <a href="https://www.instagram.com/rankpusher.pro" target="_blank" class="btn insta">
+        Follow Instagram
+    </a>
+
+    <a href="https://www.mediafire.com/file/czu096nnl8q3h1w/drip+client+regedit+store2.0.apk/file"
+       target="_blank"
+       id="download"
+       class="btn download">
+        ⬇ DOWNLOAD NOW
+    </a>
+</div>
+
+<script>
+let time = 10;
+let count = document.getElementById("count");
+let status = document.getElementById("status");
+
+let timer = setInterval(function(){
+    time--;
+    count.innerText = time;
+
+    if(time == 7){
+        status.innerText = "Scanning...";
+    }
+
+    if(time == 4){
+        status.innerText = "Verifying...";
+    }
+
+    if(time <= 0){
+        clearInterval(timer);
+        count.style.display="none";
+        status.innerText="✅ Access Granted";
+        document.getElementById("download").style.display="block";
+    }
+
+},1000);
+</script>
+
+</body>
+</html>
