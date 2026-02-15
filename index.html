@@ -1,193 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Final Unlock</title>
-
-<style>
-body{
-    margin:0;
-    font-family:Arial;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color:white;
-    text-align:center;
-}
-
-/* Neon Banner */
-.banner{
-    padding:25px;
-    font-size:24px;
-    font-weight:bold;
-    text-shadow:0 0 15px cyan;
-    animation:glow 2s infinite alternate;
-}
-@keyframes glow{
-    from{ text-shadow:0 0 10px cyan; }
-    to{ text-shadow:0 0 30px cyan,0 0 40px blue; }
-}
-
-/* 3D Card */
-.card{
-    max-width:420px;
-    margin:30px auto;
-    padding:25px;
-    background:rgba(255,255,255,0.05);
-    border-radius:20px;
-    box-shadow:0 0 25px cyan;
-    transition:0.4s;
-    transform-style:preserve-3d;
-}
-.card:hover{
-    transform:rotateY(8deg) rotateX(5deg) scale(1.03);
-}
-
-/* Buttons */
-.btn{
-    padding:12px 25px;
-    border:none;
-    border-radius:25px;
-    cursor:pointer;
-    margin:10px;
-    font-weight:bold;
-    background:cyan;
-    transition:0.2s;
-}
-.btn:active{
-    transform:scale(0.9);
-}
-
-/* Progress */
-.progress{
-    width:100%;
-    background:#222;
-    border-radius:20px;
-    margin:15px 0;
-}
-.progress-bar{
-    height:15px;
-    width:0%;
-    background:cyan;
-    border-radius:20px;
-    transition:0.3s;
-}
-
-#download{
-    display:none;
-}
-</style>
-</head>
-
-<body>
-
-<div class="banner">🔥 PREMIUM ACCESS PORTAL 🔥</div>
-
-<div class="card">
-
-<label>
-<input type="checkbox" id="human">
- I am Human
-</label>
-
-<br>
-
-<button class="btn" onclick="startProcess()">Start Verification</button>
-
-<div class="progress">
-<div class="progress-bar" id="bar"></div>
-</div>
-
-<div id="status"></div>
-
-<br>
-
-<button id="download" class="btn" onclick="goDownload()">
-📥 Download Now
-</button>
-
-</div>
-
-<!-- Click Sound -->
-<audio id="clickSound">
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7d88dbb19f.mp3?filename=click-124467.mp3" type="audio/mpeg">
-</audio>
-
-<!-- Background Music -->
-<audio id="bgMusic" loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-
-// Click sound
-document.querySelectorAll(".btn").forEach(btn=>{
-    btn.addEventListener("click",function(){
-        document.getElementById("clickSound").play();
-        document.getElementById("bgMusic").play();
-    });
-});
-
-// Female Voice
-function speak(text){
-    let speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
-    speech.pitch = 1.1;
-    speech.rate = 1;
-    speechSynthesis.speak(speech);
-}
-
-// Start Verification
-function startProcess(){
-
-    if(!document.getElementById("human").checked){
-        alert("Please confirm you are human");
-        return;
-    }
-
-    let bar=document.getElementById("bar");
-    let status=document.getElementById("status");
-    let width=0;
-
-    speak("Verification started");
-
-    let interval=setInterval(function(){
-        width+=5;
-        bar.style.width=width+"%";
-        status.innerText="Verifying... "+width+"%";
-
-        if(width>=100){
-            clearInterval(interval);
-            status.innerText="✅ Verification Complete";
-            speak("Verification complete. Download unlocked.");
-            document.getElementById("download").style.display="inline-block";
-            launchConfetti();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL | AKASH REX</title>
+    <style>
+        body, html {
+            background-color: #000;
+            color: #ff0000;
+            margin: 0; padding: 0;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
         }
-
-    },200);
-}
-
-// Redirect
-function goDownload(){
-    window.location.href="https://t.me/akashrexsutup/10";
-}
-
-// Confetti
-function launchConfetti(){
-    for(let i=0;i<30;i++){
-        let div=document.createElement("div");
-        div.style.position="fixed";
-        div.style.width="8px";
-        div.style.height="8px";
-        div.style.background="cyan";
-        div.style.top=Math.random()*100+"%";
-        div.style.left=Math.random()*100+"%";
-        div.style.borderRadius="50%";
-        document.body.appendChild(div);
-        setTimeout(()=>div.remove(),2000);
-    }
-}
-
-</script>
-
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 1000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .enter-btn {
+            border: 2px solid #ff0000; background: none; color: #ff0000;
+            padding: 20px 40px; font-size: 1.5rem; cursor: pointer;
+            letter-spacing: 5px; box-shadow: 0 0 20px #ff0000;
+            text-transform: uppercase;
+        }
+        #profile-card {
+            display: none; position: relative;
+            text-align: center; padding: 20px;
+            z-index: 10; margin-top: 50px;
+        }
+        .profile-img {
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            border: 4px solid #ff0000;
+            box-shadow: 0 0 30px #ff0000;
+            object-fit: cover; margin-bottom: 15px;
+            filter: grayscale(1) contrast(1.2);
+        }
+        .glitch {
+            font-size: 3rem; font-weight: bold;
+            color: #fff; text-shadow: 2px 0 #ff0000, -2px 0 #00ffff;
+            animation: glitch-anim 0.5s infinite;
+        }
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); }
+            100% { transform: translate(0); }
+        }
+        #terminal {
+            width: 80%; margin: 20px auto;
+            font-size: 0.9rem; color: #0f0;
+            text-align: left; height: 150px; overflow: hidden;
+        }
+        .red-line { color: #ff0000; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div id="overlay">
+        <h2 style="color: #fff; margin-bottom: 20px;">SECURITY PROTOCOL ACTIVE</h2>
+        <button class="enter-btn" onclick="startSystem()">ACCESS SYSTEM</button>
+    </div>
+    <div id="profile-card">
+        <img src="https://via.placeholder.com/150/000/f00?text=AKASH" class="profile-img">
+        <h1 class="glitch">AKASH REX</h1>
+        <p style="color: #ff0000; font-size: 1.2rem; letter-spacing: 5px;">OWNER OF CHITS</p>
+        <div id="terminal"></div>
+    </div>
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = "01010101HACKAKASHREXCHITS";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#800";
+            ctx.font = fontSize + "px monospace";
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 33);
+        function startSystem() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('profile-card').style.display = 'block';
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = "Welcome, Akash Rex. CHITS system protocol is active. Your presence is confirmed.";
+            msg.pitch = 0.8; msg.rate = 0.9;
+            window.speechSynthesis.speak(msg);
+            const terminal = document.getElementById('terminal');
+            const lines = [
+                "> [INFO] INITIALIZING CHITS KERNEL...",
+                "> [WARN] FIREWALL BYPASSED... 100%",
+                "> [DANGER] TRACING DATA PATH...",
+                "> [SYSTEM] WELCOME, MASTER AKASH REX."
+            ];
+            let i = 0;
+            function typeLog() {
+                if (i < lines.length) {
+                    let p = document.createElement('p');
+                    p.innerHTML = lines[i];
+                    if(lines[i].includes('DANGER')) p.className = 'red-line';
+                    terminal.appendChild(p);
+                    i++;
+                    setTimeout(typeLog, 1000);
+                }
+            }
+            typeLog();
+        }
+    </script>
 </body>
 </html>
