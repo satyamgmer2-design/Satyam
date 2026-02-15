@@ -1,104 +1,54 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ AKASH REX OF CHITS - OFFICIAL ⚡</title>
+    <title>AKASH REX | CHITS TERMINAL</title>
     <style>
-        body {
-            background-color: #050000;
-            color: #ff0000;
-            font-family: 'Courier New', monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-        .main-box {
-            border: 3px solid #ff0000;
-            padding: 30px;
-            background: rgba(15, 0, 0, 0.95);
-            box-shadow: 0 0 50px #ff0000;
-            text-align: center;
-            max-width: 450px;
-            width: 90%;
-        }
-        h1 {
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 5px;
-        }
-        .file-info {
-            color: #fff;
-            background: #330000;
-            padding: 10px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            border: 1px dashed #ff0000;
-        }
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            margin: 15px 0;
-            text-decoration: none;
-            font-weight: bold;
-            border: 2px solid;
-            transition: 0.4s;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        .yt-btn { border-color: #ff0000; color: #ff0000; }
-        .ig-btn { border-color: #e1306c; color: #e1306c; display: none; }
-        .dl-btn { background: #ff0000; color: #000; border: none; display: none; box-shadow: 0 0 30px #ff0000; }
+        body, html { background: #000; color: #ff0000; margin: 0; padding: 0; font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.4; }
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .enter-btn { border: 2px solid #ff0000; background: none; color: #ff0000; padding: 20px 40px; font-size: 1.2rem; cursor: pointer; letter-spacing: 5px; box-shadow: 0 0 20px #ff0000; }
+        #profile-card { display: none; text-align: center; padding: 20px; z-index: 10; margin-top: 50px; }
+        .profile-img { width: 150px; height: 150px; border-radius: 50%; border: 3px solid #ff0000; box-shadow: 0 0 30px #ff0000; object-fit: cover; filter: grayscale(1); }
+        .glitch { font-size: 2.5rem; color: #fff; text-shadow: 2px 0 #ff0000, -2px 0 #00ffff; animation: g 0.5s infinite; }
+        @keyframes g { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 100% { transform: translate(0); } }
+        #log { width: 85%; margin: 20px auto; font-size: 0.8rem; color: #0f0; text-align: left; height: 120px; }
     </style>
 </head>
 <body>
-
-    <div class="main-box">
-        <h1>AKASH REX OF CHITS</h1>
-        <div class="file-info">FILE: DRIP_CLIENT_REGEDIT.APK</div>
-        
-        <a href="https://www.youtube.com/@TrustedPanelHub" target="_blank" class="btn yt-btn" id="ytLink" onclick="unlockIG()">
-            1. SUBSCRIBE TO UNLOCK
-        </a>
-
-        <a href="https://www.instagram.com/rankpusher.pro" target="_blank" class="btn ig-btn" id="igLink" onclick="unlockDL()">
-            2. FOLLOW ON INSTAGRAM
-        </a>
-
-        <a href="https://www.mediafire.com/file/czu096nnl8q3h1w/drip+client+regedit+store2.0.apk/file" target="_blank" class="btn dl-btn" id="dlLink" onclick="playDevilVoice()">
-            ⚡ DOWNLOAD NOW ⚡
-        </a>
+    <canvas id="matrix"></canvas>
+    <div id="overlay">
+        <h2 style="color: #fff; letter-spacing: 2px;">ENCRYPTION ACTIVE</h2>
+        <button class="enter-btn" onclick="run()">BYPASS SYSTEM</button>
     </div>
-
+    <div id="profile-card">
+        <img src="https://via.placeholder.com/150/000/f00?text=AKASH+REX" class="profile-img">
+        <h1 class="glitch">AKASH REX</h1>
+        <p style="color: #ff0000; letter-spacing: 3px;">OWNER OF CHITS</p>
+        <div id="log"></div>
+    </div>
     <script>
-        function unlockIG() {
-            setTimeout(function() {
-                document.getElementById('igLink').style.display = 'block';
-                document.getElementById('ytLink').innerText = "✅ SUBSCRIBED";
-            }, 2000);
+        const c = document.getElementById('matrix'), x = c.getContext('2d');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        const s = "01AKASHREXCHITS01", f = 16, d = Array(Math.floor(c.width/f)).fill(1);
+        function draw() {
+            x.fillStyle = "rgba(0,0,0,0.05)"; x.fillRect(0,0,c.width,c.height);
+            x.fillStyle = "#800"; x.font = f+"px monospace";
+            d.forEach((y,i) => {
+                x.fillText(s[Math.floor(Math.random()*s.length)], i*f, y*f);
+                if(y*f > c.height && Math.random() > 0.975) d[i] = 0; d[i]++;
+            });
         }
-
-        function unlockDL() {
-            setTimeout(function() {
-                document.getElementById('dlLink').style.display = 'block';
-                document.getElementById('igLink').innerText = "✅ FOLLOWED";
-            }, 2000);
-        }
-
-        function playDevilVoice() {
-            var msg = new SpeechSynthesisUtterance();
-            msg.text = "Jao abhi maje karo, aapka download complete ho gaya";
-            msg.lang = 'hi-IN';
-            msg.pitch = 0.1;
-            msg.rate = 0.7;
-            window.speechSynthesis.speak(msg);
+        setInterval(draw, 35);
+        function run() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('profile-card').style.display = 'block';
+            const v = new SpeechSynthesisUtterance("Welcome, Akash Rex. CHITS system protocol is active.");
+            v.pitch = 0.7; window.speechSynthesis.speak(v);
+            const l = document.getElementById('log'), t = ["> BYPASSING FIREWALL...", "> ACCESSING DATA...", "> MASTER AKASH REX CONFIRMED."];
+            let i = 0; setInterval(() => { if(i < t.length) { l.innerHTML += t[i]+"<br>"; i++; } }, 1000);
         }
     </script>
-
 </body>
 </html>
