@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Animated Unlock System</title>
+<title>Premium Final Unlock</title>
 
 <style>
 body{
@@ -12,96 +12,99 @@ body{
     background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
     color:white;
     text-align:center;
-    overflow:hidden;
 }
 
-/* Fade Animation */
-.page{
-    display:none;
-    padding-top:80px;
-    animation:fadeIn 0.6s ease-in-out;
+/* Neon Banner */
+.banner{
+    padding:25px;
+    font-size:24px;
+    font-weight:bold;
+    text-shadow:0 0 15px cyan;
+    animation:glow 2s infinite alternate;
+}
+@keyframes glow{
+    from{ text-shadow:0 0 10px cyan; }
+    to{ text-shadow:0 0 30px cyan,0 0 40px blue; }
 }
 
-@keyframes fadeIn{
-    from{opacity:0; transform:scale(0.95);}
-    to{opacity:1; transform:scale(1);}
-}
-
-.ad-box{
-    width:90%;
-    max-width:350px;
-    height:150px;
-    margin:20px auto;
-    background:linear-gradient(45deg,#ff00cc,#3333ff);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:15px;
+/* 3D Card */
+.card{
+    max-width:420px;
+    margin:30px auto;
+    padding:25px;
+    background:rgba(255,255,255,0.05);
+    border-radius:20px;
     box-shadow:0 0 25px cyan;
-    font-size:20px;
+    transition:0.4s;
+    transform-style:preserve-3d;
+}
+.card:hover{
+    transform:rotateY(8deg) rotateX(5deg) scale(1.03);
 }
 
+/* Buttons */
 .btn{
-    padding:12px 30px;
+    padding:12px 25px;
     border:none;
     border-radius:25px;
-    background:cyan;
-    font-size:16px;
     cursor:pointer;
     margin:10px;
+    font-weight:bold;
+    background:cyan;
     transition:0.2s;
-    display:none;
 }
-
-/* Button Tap Animation */
 .btn:active{
     transform:scale(0.9);
-    box-shadow:0 0 35px white;
 }
 
-#count{
-    font-size:35px;
-    margin-top:20px;
-    color:#ff4444;
+/* Progress */
+.progress{
+    width:100%;
+    background:#222;
+    border-radius:20px;
+    margin:15px 0;
+}
+.progress-bar{
+    height:15px;
+    width:0%;
+    background:cyan;
+    border-radius:20px;
+    transition:0.3s;
+}
+
+#download{
+    display:none;
 }
 </style>
 </head>
 
 <body>
 
-<div id="count"></div>
+<div class="banner">🔥 PREMIUM ACCESS PORTAL 🔥</div>
 
-<!-- STEP 1-5 ADS -->
-<div id="page1" class="page" style="display:block;"><div class="ad-box">Ad 1</div><button class="btn" onclick="tapEffect();nextPage(2)">Next</button></div>
-<div id="page2" class="page"><div class="ad-box">Ad 2</div><button class="btn" onclick="tapEffect();nextPage(3)">Next</button></div>
-<div id="page3" class="page"><div class="ad-box">Ad 3</div><button class="btn" onclick="tapEffect();nextPage(4)">Next</button></div>
-<div id="page4" class="page"><div class="ad-box">Ad 4</div><button class="btn" onclick="tapEffect();nextPage(5)">Next</button></div>
-<div id="page5" class="page"><div class="ad-box">Ad 5</div><button class="btn" onclick="tapEffect();nextPage(6)">Continue</button></div>
+<div class="card">
 
-<!-- STEP 6 SOCIAL -->
-<div id="page6" class="page">
-    <h2>Subscribe & Follow</h2>
+<label>
+<input type="checkbox" id="human">
+ I am Human
+</label>
 
-    <a href="https://www.youtube.com/@TrustedPanelHub" target="_blank">
-        <button class="btn" style="display:inline-block;background:red;color:white;" onclick="tapEffect()">YouTube</button>
-    </a>
+<br>
 
-    <a href="https://www.instagram.com/rankpusher.pro" target="_blank">
-        <button class="btn" style="display:inline-block;background:#e1306c;color:white;" onclick="tapEffect()">Instagram</button>
-    </a>
+<button class="btn" onclick="startProcess()">Start Verification</button>
 
-    <br>
-    <button class="btn" style="display:inline-block;" onclick="tapEffect();nextPage(7)">
-        Continue
-    </button>
+<div class="progress">
+<div class="progress-bar" id="bar"></div>
 </div>
 
-<!-- STEP 7 DOWNLOAD -->
-<div id="page7" class="page">
-    <h2>✅ All Steps Completed</h2>
-    <button class="btn" style="display:inline-block;" onclick="tapEffect();goDownload()">
-        📥 Download Now
-    </button>
+<div id="status"></div>
+
+<br>
+
+<button id="download" class="btn" onclick="goDownload()">
+📥 Download Now
+</button>
+
 </div>
 
 <!-- Click Sound -->
@@ -109,49 +112,82 @@ body{
 <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7d88dbb19f.mp3?filename=click-124467.mp3" type="audio/mpeg">
 </audio>
 
+<!-- Background Music -->
+<audio id="bgMusic" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-let currentPage = 1;
 
-function startCountdown(){
-    let time = 5;
-    let count = document.getElementById("count");
-    let btn = document.querySelector("#page"+currentPage+" .btn");
+// Click sound
+document.querySelectorAll(".btn").forEach(btn=>{
+    btn.addEventListener("click",function(){
+        document.getElementById("clickSound").play();
+        document.getElementById("bgMusic").play();
+    });
+});
 
-    btn.style.display = "none";
-    count.innerText = "Wait " + time + " seconds";
-
-    let timer = setInterval(function(){
-        time--;
-        count.innerText = "Wait " + time + " seconds";
-
-        if(time <= 0){
-            clearInterval(timer);
-            count.innerText = "";
-            btn.style.display = "inline-block";
-        }
-    },1000);
+// Female Voice
+function speak(text){
+    let speech = new SpeechSynthesisUtterance(text);
+    speech.lang = "en-US";
+    speech.pitch = 1.1;
+    speech.rate = 1;
+    speechSynthesis.speak(speech);
 }
 
-function nextPage(pageNum){
-    document.getElementById("page"+currentPage).style.display="none";
-    currentPage = pageNum;
-    document.getElementById("page"+currentPage).style.display="block";
+// Start Verification
+function startProcess(){
 
-    if(currentPage <= 5){
-        startCountdown();
+    if(!document.getElementById("human").checked){
+        alert("Please confirm you are human");
+        return;
     }
+
+    let bar=document.getElementById("bar");
+    let status=document.getElementById("status");
+    let width=0;
+
+    speak("Verification started");
+
+    let interval=setInterval(function(){
+        width+=5;
+        bar.style.width=width+"%";
+        status.innerText="Verifying... "+width+"%";
+
+        if(width>=100){
+            clearInterval(interval);
+            status.innerText="✅ Verification Complete";
+            speak("Verification complete. Download unlocked.");
+            document.getElementById("download").style.display="inline-block";
+            launchConfetti();
+        }
+
+    },200);
 }
 
+// Redirect
 function goDownload(){
     window.location.href="https://t.me/akashrexsutup/10";
 }
 
-function tapEffect(){
-    document.getElementById("clickSound").play();
+// Confetti
+function launchConfetti(){
+    for(let i=0;i<30;i++){
+        let div=document.createElement("div");
+        div.style.position="fixed";
+        div.style.width="8px";
+        div.style.height="8px";
+        div.style.background="cyan";
+        div.style.top=Math.random()*100+"%";
+        div.style.left=Math.random()*100+"%";
+        div.style.borderRadius="50%";
+        document.body.appendChild(div);
+        setTimeout(()=>div.remove(),2000);
+    }
 }
 
-startCountdown();
 </script>
 
 </body>
-    </html>
+</html>
