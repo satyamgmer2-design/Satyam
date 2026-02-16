@@ -10,10 +10,10 @@
         .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #ff0000; margin-bottom: 10px; box-shadow: 0 0 15px #ff0000; }
         h1 { font-size: 1.4rem; letter-spacing: 1px; text-shadow: 0 0 10px #ff0000; margin: 5px 0; color: #fff; }
         .service-info { background: #220000; padding: 10px; border: 1px dashed #ff0000; margin: 15px 0; color: #fff; font-size: 0.9rem; }
-        input { width: 80%; padding: 12px; margin: 10px 0; background: #000; color: #00ff00; border: 1px solid #ff0000; text-align: center; font-size: 1.2rem; font-weight: bold; border-radius: 5px; }
+        input { width: 85%; padding: 12px; margin: 10px 0; background: #000; color: #00ff00; border: 1px solid #ff0000; text-align: center; font-size: 1.2rem; font-weight: bold; border-radius: 5px; outline: none; }
         .price-box { font-size: 1.8rem; color: #fff; margin: 20px 0; border-top: 1px solid #ff0000; padding-top: 10px; }
         .qr-box { margin-top: 10px; border: 2px solid #fff; padding: 10px; background: #fff; display: inline-block; border-radius: 10px; }
-        .qr-box img { width: 180px; }
+        .qr-box img { width: 180px; display: block; }
         .btn { display: block; width: 100%; padding: 15px; margin: 15px 0; text-decoration: none; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
         .verify-btn { background: #28a745; color: #fff; box-shadow: 0 0 15px #28a745; }
         .ig-btn { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff; }
@@ -27,7 +27,7 @@
         <img src="https://i.ibb.co/mC6S9vH/pro-rank-pusher.jpg" class="profile-img" alt="Rank • Pusher">
         
         <h1>Rank • Pusher</h1>
-        <div class="service-info">PRO SERVICE: ₹4 PER STAR</div>
+        <div class="service-info">CS RANK PUSH: ₹4 PER STAR</div>
         
         <label style="color:#aaa;">Enter Number of Stars:</label><br>
         <input type="number" id="starQty" value="1" min="1" oninput="updatePrice()">
@@ -54,12 +54,16 @@
     <script>
         function updatePrice() {
             let qty = document.getElementById('starQty').value;
-            let price = qty * 4;
-            document.getElementById('totalPrice').innerText = "₹" + price;
+            if(qty < 1 || qty == "") {
+                document.getElementById('totalPrice').innerText = "₹0";
+            } else {
+                let price = qty * 4;
+                document.getElementById('totalPrice').innerText = "₹" + price;
+            }
         }
 
         function verifyPay() {
-            alert("Verification In Progress...\n\nPlease send your payment screenshot to @rankpusher.pro for manual approval and start.");
+            alert("Verification In Progress...\n\nPlease send your payment screenshot to @rankpusher.pro for manual approval.");
         }
     </script>
 
