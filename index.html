@@ -1,64 +1,54 @@
-<!DOCTYPE html>
+     <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rank • Pusher OFFICIAL STORE</title>
+    <title>Rank • Pusher Store</title>
     <style>
-        body { background: #050000; color: #ff0000; font-family: 'Courier New', monospace; text-align: center; padding: 15px; margin: 0; }
+        body { background: #050000; color: #ff0000; font-family: sans-serif; text-align: center; padding: 15px; margin: 0; }
         .card { border: 2px solid #ff0000; padding: 20px; border-radius: 15px; background: rgba(20,0,0,0.9); box-shadow: 0 0 30px #ff0000; max-width: 400px; margin: auto; }
-        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #ff0000; margin-bottom: 10px; box-shadow: 0 0 15px #ff0000; }
-        h1 { font-size: 1.4rem; letter-spacing: 1px; text-shadow: 0 0 10px #ff0000; margin: 5px 0; color: #fff; }
-        .service-info { background: #220000; padding: 10px; border: 1px dashed #ff0000; margin: 15px 0; color: #fff; font-size: 0.9rem; }
-        input { width: 85%; padding: 12px; margin: 10px 0; background: #000; color: #00ff00; border: 1px solid #ff0000; text-align: center; font-size: 1.2rem; font-weight: bold; border-radius: 5px; outline: none; }
+        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #ff0000; margin-bottom: 10px; }
+        h1 { font-size: 1.4rem; color: #fff; margin: 5px 0; }
+        .service-info { background: #220000; padding: 10px; border: 1px dashed #ff0000; margin: 15px 0; color: #fff; }
+        input { width: 85%; padding: 12px; margin: 10px 0; background: #000; color: #00ff00; border: 1px solid #ff0000; text-align: center; font-size: 1.2rem; font-weight: bold; border-radius: 5px; }
         .price-box { font-size: 1.8rem; color: #fff; margin: 20px 0; border-top: 1px solid #ff0000; padding-top: 10px; }
         .qr-box { margin-top: 10px; border: 2px solid #fff; padding: 10px; background: #fff; display: inline-block; border-radius: 10px; }
         .qr-box img { width: 180px; display: block; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 15px 0; text-decoration: none; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
-        .verify-btn { background: #28a745; color: #fff; box-shadow: 0 0 15px #28a745; }
-        .ig-btn { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff; }
-        .status { color: #ffff00; font-size: 0.8rem; margin-top: 5px; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+        .btn { display: block; width: 100%; padding: 15px; margin: 15px 0; text-decoration: none; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
+        .verify-btn { background: #28a745; color: #fff; }
+        .ig-btn { background: linear-gradient(45deg, #f09433, #bc1888); color: #fff; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <img src="https://i.ibb.co/mC6S9vH/pro-rank-pusher.jpg" class="profile-img" alt="Rank • Pusher">
-        
+        <img src="https://i.ibb.co/mC6S9vH/pro-rank-pusher.jpg" class="profile-img">
         <h1>Rank • Pusher</h1>
         <div class="service-info">CS RANK PUSH: ₹4 PER STAR</div>
         
         <label style="color:#aaa;">Enter Number of Stars:</label><br>
         <input type="number" id="starQty" value="1" min="1" oninput="updatePrice()">
 
-        <div class="price-box">
-            Total: <span id="totalPrice">₹4</span>
-        </div>
+        <div class="price-box">Total: <span id="totalPrice">₹4</span></div>
 
         <div class="qr-box">
             <img src="https://i.ibb.co/6y4Lz3Q/qr-code.jpg" alt="UPI QR"> 
             <p style="color:#000; font-size:0.7rem; font-weight:bold; margin:5px 0;">SCAN TO PAY UPI</p>
         </div>
 
-        <div class="status">● WAITING FOR PAYMENT...</div>
-
-        <button class="btn verify-btn" onclick="verifyPay()">VERIFY TRANSACTION (AFTER PAY)</button>
-
-        <p style="color:#fff; font-size:0.8rem;">Confirm on Instagram:</p>
-        <a href="https://www.instagram.com/rankpusher.pro" target="_blank" class="btn ig-btn">
-            MESSAGE @rankpusher.pro
-        </a>
+        <button class="btn verify-btn" onclick="verifyPay()">VERIFY TRANSACTION</button>
+        <a href="https://www.instagram.com/rankpusher.pro" target="_blank" class="btn ig-btn">MESSAGE @RANKPUSHER.PRO</a>
     </div>
 
     <script>
         function updatePrice() {
-            let qty = document.getElementById('starQty').value;
-            if(qty < 1 || qty == "") {
-                document.getElementById('totalPrice').innerText = "₹0";
+            var input = document.getElementById('starQty');
+            var display = document.getElementById('totalPrice');
+            var qty = input.value;
+            if (qty < 1 || qty == "") {
+                display.innerText = "₹0";
             } else {
-                let price = qty * 4;
-                document.getElementById('totalPrice').innerText = "₹" + price;
+                display.innerText = "₹" + (qty * 4);
             }
         }
 
@@ -66,6 +56,6 @@
             alert("Verification In Progress...\n\nPlease send your payment screenshot to @rankpusher.pro for manual approval.");
         }
     </script>
-
 </body>
 </html>
+           
