@@ -1,114 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AKASH REX | SECURE GATEWAY</title>
+    <title>Rank • Pusher OFFICIAL STORE</title>
     <style>
-        /* Security: Text Selection Band */
-        body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-        
-        body, html { background: #000; color: #0f0; margin: 0; padding: 0; font-family: 'Courier New', monospace; text-align: center; overflow: hidden; height: 100%; }
-        
-        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        
-        .start-btn { 
-            border: 2px solid #ff0000; 
-            background: transparent; 
-            color: #ff0000; 
-            padding: 20px 50px; 
-            font-size: 1.5rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            box-shadow: 0 0 20px #ff0000; 
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: pulse 1.5s infinite;
-        }
-
-        #main-terminal { display: none; margin-top: 50px; padding: 20px; }
-        .log-text { text-align: left; color: #0f0; margin: 5px 0; font-size: 14px; border-left: 3px solid #0f0; padding-left: 10px; }
-        
-        /* Chupa hua Download Button */
-        #final-link { display: none; margin-top: 40px; }
-        .secure-btn {
-            background: #00ff00;
-            color: #000;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: 900;
-            text-decoration: none;
-            border-radius: 5px;
-            box-shadow: 0 0 40px #00ff00;
-            border: 2px solid #fff;
-        }
-
-        @keyframes pulse { 0% { box-shadow: 0 0 10px #ff0000; } 50% { box-shadow: 0 0 30px #ff0000; } 100% { box-shadow: 0 0 10px #ff0000; } }
+        body { background: #050000; color: #ff0000; font-family: 'Courier New', monospace; text-align: center; padding: 15px; margin: 0; }
+        .card { border: 2px solid #ff0000; padding: 20px; border-radius: 15px; background: rgba(20,0,0,0.9); box-shadow: 0 0 30px #ff0000; max-width: 400px; margin: auto; }
+        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #ff0000; margin-bottom: 10px; box-shadow: 0 0 15px #ff0000; }
+        h1 { font-size: 1.4rem; letter-spacing: 1px; text-shadow: 0 0 10px #ff0000; margin: 5px 0; color: #fff; }
+        .service-info { background: #220000; padding: 10px; border: 1px dashed #ff0000; margin: 15px 0; color: #fff; font-size: 0.9rem; }
+        input { width: 80%; padding: 12px; margin: 10px 0; background: #000; color: #00ff00; border: 1px solid #ff0000; text-align: center; font-size: 1.2rem; font-weight: bold; border-radius: 5px; }
+        .price-box { font-size: 1.8rem; color: #fff; margin: 20px 0; border-top: 1px solid #ff0000; padding-top: 10px; }
+        .qr-box { margin-top: 10px; border: 2px solid #fff; padding: 10px; background: #fff; display: inline-block; border-radius: 10px; }
+        .qr-box img { width: 180px; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 15px 0; text-decoration: none; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
+        .verify-btn { background: #28a745; color: #fff; box-shadow: 0 0 15px #28a745; }
+        .ig-btn { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff; }
+        .status { color: #ffff00; font-size: 0.8rem; margin-top: 5px; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
-<body oncontextmenu="return false;"> <div id="overlay">
-        <h2 style="color: #fff; margin-bottom: 20px;">SECURITY CHECK REQUIRED</h2>
-        <button class="start-btn" onclick="injectSystem()">INJECT REGEDIT</button>
-        <p style="color: #444; margin-top: 20px; font-size: 10px;">ID: REX-SECURE-V2</p>
-    </div>
+<body>
 
-    <div id="main-terminal">
-        <h1 style="color: red; text-shadow: 2px 2px #fff;">AKASH REX SERVER</h1>
-        <div id="logs"></div>
+    <div class="card">
+        <img src="https://i.ibb.co/mC6S9vH/pro-rank-pusher.jpg" class="profile-img" alt="Rank • Pusher">
         
-        <div id="final-link">
-            <h3 style="color: white; margin-bottom: 20px;">ACCESS GRANTED SUCCESSFULLY</h3>
-            
-            <a href="https://earnlinks.in/xyz" class="secure-btn">DOWNLOAD FILE NOW</a>
-            
-            <p style="color: #555; margin-top: 20px; font-size: 11px;">Note: Link expires in 60 seconds.</p>
+        <h1>Rank • Pusher</h1>
+        <div class="service-info">PRO SERVICE: ₹4 PER STAR</div>
+        
+        <label style="color:#aaa;">Enter Number of Stars:</label><br>
+        <input type="number" id="starQty" value="1" min="1" oninput="updatePrice()">
+
+        <div class="price-box">
+            Total: <span id="totalPrice">₹4</span>
         </div>
+
+        <div class="qr-box">
+            <img src="https://i.ibb.co/6y4Lz3Q/qr-code.jpg" alt="UPI QR"> 
+            <p style="color:#000; font-size:0.7rem; font-weight:bold; margin:5px 0;">SCAN TO PAY UPI</p>
+        </div>
+
+        <div class="status">● WAITING FOR PAYMENT...</div>
+
+        <button class="btn verify-btn" onclick="verifyPay()">VERIFY TRANSACTION (AFTER PAY)</button>
+
+        <p style="color:#fff; font-size:0.8rem;">Confirm on Instagram:</p>
+        <a href="https://www.instagram.com/rankpusher.pro" target="_blank" class="btn ig-btn">
+            MESSAGE @rankpusher.pro
+        </a>
     </div>
 
     <script>
-        function injectSystem() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('main-terminal').style.display = 'block';
+        function updatePrice() {
+            let qty = document.getElementById('starQty').value;
+            let price = qty * 4;
+            document.getElementById('totalPrice').innerText = "₹" + price;
+        }
 
-            // Voice Command
-            const speech = new SpeechSynthesisUtterance("System Hacked by Akash Rex. Connecting to secure cloud. Do not close this window.");
-            speech.rate = 0.9;
-            speech.pitch = 0.6;
-            window.speechSynthesis.speak(speech);
-
-            const logs = document.getElementById('logs');
-            const messages = [
-                "Searching for Device ID...",
-                "Device Found: Android 14 [ROOTED]",
-                "Bypassing Firewall...",
-                "Injecting aimbot_v2.dll...",
-                "Downloading Config Files...",
-                "Encryption: 100% Complete.",
-                "GENERATING SECURE LINK..."
-            ];
-
-            let i = 0;
-            function addLog() {
-                if (i < messages.length) {
-                    const p = document.createElement('p');
-                    p.className = 'log-text';
-                    p.innerText = "> " + messages[i];
-                    logs.appendChild(p);
-                    
-                    // Random typing sound effect (Visual only)
-                    i++;
-                    setTimeout(addLog, 800); // Har message 0.8 second baad aayega
-                } else {
-                    // Sab kuch hone ke baad button dikhao
-                    document.getElementById('final-link').style.display = 'block';
-                    
-                    // Final Voice
-                    const done = new SpeechSynthesisUtterance("File is ready. Download now.");
-                    window.speechSynthesis.speak(done);
-                }
-            }
-            addLog();
+        function verifyPay() {
+            alert("Verification In Progress...\n\nPlease send your payment screenshot to @rankpusher.pro for manual approval and start.");
         }
     </script>
+
 </body>
 </html>
