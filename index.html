@@ -1,120 +1,500 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Chat - Live N Move</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>DOMINATE THE RANK — Professional Grandmaster Push Service</title>
 
-<style>
-body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#0f0f0f;
-    color:white;
-    display:flex;
-    flex-direction:column;
-    height:100vh;
-}
+  <!-- Futuristic typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
-header{
-    padding:15px;
-    background:#161616;
-    text-align:center;
-    font-weight:bold;
-    font-size:18px;
-    border-bottom:1px solid #222;
-}
+  <style>
+    :root{
+      --bg-1:#030103;
+      --bg-2:#220007;
+      --neon-red:#ff0044;
+      --neon-blue:#00e5ff;
+      --glass: rgba(255,255,255,0.03);
+    }
 
-#chat{
-    flex:1;
-    overflow-y:auto;
-    padding:20px;
-}
+    /* Page reset */
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg-1) 0%, #070005 40%, var(--bg-2) 100%);font-family:'Orbitron',system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#fff;overflow:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 
-.message{
-    max-width:70%;
-    padding:12px 16px;
-    margin:10px 0;
-    border-radius:12px;
-    line-height:1.4;
-}
+    /* Animated noisy vignette to add depth */
+    body::after{
+      content:"";
+      position:fixed;inset:0;pointer-events:none;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(255,0,68,0.02), transparent 6%),
+        radial-gradient(1000px 500px at 95% 90%, rgba(0,229,255,0.02), transparent 8%);
+      mix-blend-mode: screen;
+      z-index:3;
+      opacity:0.9;
+    }
 
-.user{
-    background:#2563eb;
-    align-self:flex-end;
-    margin-left:auto;
-}
+    /* Canvas (Three.js) sits full-screen under UI */
+    #glcanvas{
+      position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1;
+      touch-action:none;
+    }
 
-.bot{
-    background:#2a2a2a;
-    align-self:flex-start;
-}
+    /* UI overlay */
+    .ui{
+      position:relative;z-index:6;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      height:100vh;padding:24px;box-sizing:border-box;pointer-events:none;
+    }
 
-#inputArea{
-    display:flex;
-    padding:15px;
-    background:#161616;
-    border-top:1px solid #222;
-}
+    .panel{
+      width:min(980px,95%);text-align:center;padding:clamp(14px,3.4vw,36px);border-radius:14px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow:0 8px 48px rgba(0,0,0,0.7), 0 0 120px rgba(255,0,68,0.02);
+      backdrop-filter: blur(6px) saturate(120%);pointer-events:auto;
+      border:1px solid rgba(255,0,68,0.04);
+    }
 
-#input{
-    flex:1;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    outline:none;
-    background:#2a2a2a;
-    color:white;
-}
+    .title{
+      font-size:clamp(28px,6.6vw,72px);letter-spacing:0.12em;margin:0 0 8px 0;
+      color:#fff;text-transform:uppercase;line-height:1;
+      text-shadow:
+        0 0 10px rgba(255,0,68,0.06),
+        0 8px 30px rgba(0,0,0,0.7);
+    }
 
-button{
-    margin-left:10px;
-    padding:12px 18px;
-    border:none;
-    border-radius:8px;
-    background:#2563eb;
-    color:white;
-    cursor:pointer;
-}
+    .subtitle{
+      margin:0 0 18px 0;color:#ffcdd8;font-size:clamp(12px,2.2vw,18px);opacity:0.95;
+      font-weight:400;
+    }
 
-button:hover{
-    background:#1e40af;
-}
-</style>
+    /* CTA Row */
+    .actions{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:6px}
+
+    .btn{
+      --pad:12px 24px;
+      pointer-events:auto;
+      display:inline-flex;align-items:center;gap:10px;justify-content:center;
+      padding:var(--pad);border-radius:12px;border:0;cursor:pointer;font-weight:700;
+      font-size:clamp(13px,2vw,18px);text-transform:uppercase;color:#fff;letter-spacing:0.06em;
+      transition:transform .18s cubic-bezier(.2,.9,.2,1),box-shadow .18s,filter .18s;
+      box-shadow:0 10px 40px rgba(0,0,0,0.6), inset 0 -2px 0 rgba(255,255,255,0.02);
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .btn:active{transform:translateY(1px) scale(.998);}
+    .btn:focus{outline:none;box-shadow:0 0 0 6px rgba(255,0,68,0.06), 0 14px 60px rgba(0,0,0,0.7);}
+
+    .btn--red{
+      background:linear-gradient(180deg, rgba(255,0,68,0.14), rgba(255,0,68,0.06));
+      border:1px solid rgba(255,0,68,0.18);
+      box-shadow:
+        0 8px 40px rgba(255,0,68,0.06),
+        0 0 28px rgba(255,0,68,0.06),
+        0 0 120px rgba(255,0,68,0.03);
+      text-shadow:0 0 8px rgba(255,0,68,0.12);
+    }
+
+    .btn--blue{
+      background:linear-gradient(180deg, rgba(0,229,255,0.08), rgba(0,229,255,0.03));
+      border:1px solid rgba(0,229,255,0.12);
+      box-shadow:
+        0 8px 34px rgba(0,229,255,0.04),
+        0 0 18px rgba(0,229,255,0.06);
+      color:#eaffff;
+    }
+
+    .btn--ghost{
+      background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff;padding:10px 14px;border-radius:10px;
+      box-shadow:none;font-size:13px;
+    }
+
+    .btn:hover{transform:translateY(-5px) scale(1.02);filter:saturate(120%);}
+    .btn--red:hover{box-shadow:0 14px 60px rgba(255,0,68,0.12),0 0 60px rgba(255,0,68,0.12);}
+    .btn--blue:hover{box-shadow:0 14px 48px rgba(0,229,255,0.12),0 0 26px rgba(0,229,255,0.08);}
+
+    .hint{margin-top:12px;font-size:12px;color:#ffb7c7;opacity:0.9}
+
+    /* Small screens */
+    @media (max-width:720px){
+      .panel{padding:16px;border-radius:12px}
+      .title{font-size:28px;letter-spacing:0.06em}
+      .actions{flex-direction:column}
+      .btn{width:100%}
+      .btn--ghost{width:auto}
+    }
+
+    /* Subtle instruction dot at bottom */
+    .scroll-hint{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;color:rgba(255,255,255,0.06);font-size:12px;z-index:5}
+
+    /* Small screen performance tip overlay */
+    .perf-badge{position:fixed;right:12px;top:12px;background:rgba(0,0,0,0.28);padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);font-size:12px;color:#ffdfe6;z-index:6;backdrop-filter:blur(4px);}
+  </style>
 </head>
-
 <body>
+  <!-- WebGL canvas -->
+  <canvas id="glcanvas"></canvas>
 
-<header>AI Chat</header>
+  <!-- UI overlay -->
+  <div class="ui" aria-hidden="false">
+    <div class="panel" role="region" aria-label="Hero">
+      <h1 class="title">DOMINATE THE RANK</h1>
+      <p class="subtitle">Professional Grandmaster Push Service</p>
 
-<div id="chat"></div>
+      <div class="actions" role="group" aria-label="Call to action">
+        <button id="cta" class="btn btn--red" aria-label="Start Now">Start Now</button>
+        <button id="demo" class="btn btn--blue" aria-label="Demo rotate">View Demo</button>
+        <button id="mute" class="btn btn--ghost" aria-pressed="false" aria-label="Toggle sound">🔊 Sound</button>
+      </div>
 
-<div id="inputArea">
-    <input type="text" id="input" placeholder="Type your message...">
-    <button onclick="sendMessage()">Send</button>
-</div>
+      <p class="hint">Dangerous. Fast. Professional. Mobile-ready.</p>
+    </div>
+  </div>
 
-<script>
-function sendMessage(){
-    const input = document.getElementById("input");
-    const chat = document.getElementById("chat");
+  <div class="perf-badge" id="perfBadge">Performance: auto</div>
 
-    if(input.value.trim() === "") return;
+  <div class="scroll-hint">Touch & drag to rotate • Tap Start to trigger</div>
 
-    const userMsg = document.createElement("div");
-    userMsg.className = "message user";
-    userMsg.textContent = input.value;
-    chat.appendChild(userMsg);
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.150.1/build/three.module.js';
+    import { OrbitControls } from 'https://unpkg.com/three@0.150.1/examples/jsm/controls/OrbitControls.js';
+    import { EffectComposer } from 'https://unpkg.com/three@0.150.1/examples/jsm/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'https://unpkg.com/three@0.150.1/examples/jsm/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'https://unpkg.com/three@0.150.1/examples/jsm/postprocessing/UnrealBloomPass.js';
 
-    const botMsg = document.createElement("div");
-    botMsg.className = "message bot";
-    botMsg.textContent = "This is demo AI reply.";
-    chat.appendChild(botMsg);
+    // Renderer + scene + camera
+    const canvas = document.getElementById('glcanvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
-    input.value="";
-    chat.scrollTop = chat.scrollHeight;
-}
-</script>
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x020103);
+    scene.fog = new THREE.FogExp2(0x020103, 0.025);
 
-</body>
-</html>
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
+    camera.position.set(0, 1.6, 4.0);
+
+    // Controls (subtle)
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.enablePan = false;
+    controls.enableZoom = false;
+    controls.minPolarAngle = Math.PI * 0.2;
+    controls.maxPolarAngle = Math.PI * 0.9;
+    controls.target.set(0, 1.1, 0);
+
+    // Lights
+    const hemi = new THREE.HemisphereLight(0xffe6ee, 0x110012, 0.25);
+    scene.add(hemi);
+
+    const rim = new THREE.PointLight(0x00e5ff, 1.2, 12);
+    rim.position.set(-3, 2.5, 3);
+    scene.add(rim);
+
+    const red = new THREE.PointLight(0xff0066, 1.6, 10);
+    red.position.set(2.5, 1.6, -2);
+    scene.add(red);
+
+    // Subtle ground
+    const ground = new THREE.Mesh(
+      new THREE.CircleGeometry(8, 64),
+      new THREE.MeshBasicMaterial({ color: 0x0a0000, transparent: true, opacity: 0.08 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.02;
+    scene.add(ground);
+
+    // ---- Stylized low-poly warrior (primitives) ----
+    const warrior = new THREE.Group();
+
+    const chestMat = new THREE.MeshStandardMaterial({ color: 0x0f1113, metalness: 0.7, roughness: 0.28 });
+    const chest = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.0, 0.46), chestMat);
+    chest.position.set(0, 1.06, 0);
+    warrior.add(chest);
+
+    const helmetMat = new THREE.MeshStandardMaterial({ color: 0x0a0b0c, metalness: 1.0, roughness: 0.18 });
+    const helmet = new THREE.Mesh(new THREE.SphereGeometry(0.36, 32, 18), helmetMat);
+    helmet.position.set(0, 1.88, 0);
+    helmet.scale.set(1, 0.88, 1);
+    warrior.add(helmet);
+
+    // shoulders/arms/legs
+    const shoulderMat = chestMat.clone();
+    const shoulderL = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.16, 0.6), shoulderMat);
+    shoulderL.position.set(-0.66, 1.44, 0);
+    const shoulderR = shoulderL.clone(); shoulderR.position.x = 0.66;
+    warrior.add(shoulderL, shoulderR);
+
+    const armMat = chestMat;
+    const upperArmL = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.66, 12), armMat);
+    upperArmL.rotation.z = Math.PI/12;
+    upperArmL.position.set(-1.03, 1.12, 0);
+    const upperArmR = upperArmL.clone(); upperArmR.position.x = 1.03; upperArmR.rotation.z = -Math.PI/12;
+    warrior.add(upperArmL, upperArmR);
+
+    const legMat = new THREE.MeshStandardMaterial({ color: 0x0d0d0f, metalness: 0.5, roughness: 0.5 });
+    const legL = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.95, 12), legMat);
+    legL.position.set(-0.28, 0.36, 0);
+    const legR = legL.clone(); legR.position.x = 0.28;
+    warrior.add(legL, legR);
+
+    // emissive strips
+    const makeStrip = (w,h,color=0xff003a) => {
+      return new THREE.Mesh(
+        new THREE.BoxGeometry(w,h,0.05),
+        new THREE.MeshStandardMaterial({ color:0x000000, emissive: color, emissiveIntensity:1.5, metalness:0.6, roughness:0.18 })
+      );
+    };
+
+    const chestStrip = makeStrip(0.42, 0.9);
+    chestStrip.position.set(0, 1.06, 0.27);
+    warrior.add(chestStrip);
+
+    const visor = makeStrip(0.5, 0.16, 0x00f0ff);
+    visor.rotation.x = 0.05; visor.position.set(0, 1.9, 0.32);
+    warrior.add(visor);
+
+    const crest = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.88, 12), new THREE.MeshStandardMaterial({
+      color:0x1b0008, emissive:0xff0044, emissiveIntensity:0.9, metalness:0.7, roughness:0.2
+    }));
+    crest.rotation.z = Math.PI/2;
+    crest.position.set(0, 2.04, -0.04);
+    warrior.add(crest);
+
+    warrior.position.y = -0.06;
+    scene.add(warrior);
+
+    // Holographic back-plane
+    const holo = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 2.4, 16, 16), new THREE.MeshBasicMaterial({
+      color: 0x050014, transparent: true, opacity: 0.11, blending: THREE.AdditiveBlending
+    }));
+    holo.position.set(0, 1.25, -1.25);
+    scene.add(holo);
+
+    // ---- Particles (smoke/fire) ----
+    const particleCount = 140;
+    const pPos = new Float32Array(particleCount * 3);
+    const pCol = new Float32Array(particleCount * 3);
+    const pSize = new Float32Array(particleCount);
+
+    for (let i=0;i<particleCount;i++){
+      const idx = i*3;
+      const r = Math.random();
+      pPos[idx] = (Math.random() - 0.5) * 1.2;
+      pPos[idx+1] = Math.random() * 1.2 - 0.2;
+      pPos[idx+2] = (Math.random() - 0.5) * 0.6;
+
+      const c = new THREE.Color();
+      if (r < 0.36) c.setHSL(0.06,1.0,0.5);
+      else if (r < 0.7) c.setHSL(0.02,0.85,0.38);
+      else c.setRGB(0.14,0.14,0.14);
+      pCol[idx]=c.r;pCol[idx+1]=c.g;pCol[idx+2]=c.b;
+
+      pSize[i] = 18 + Math.random()*52;
+    }
+
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos,3));
+    pGeo.setAttribute('customColor', new THREE.BufferAttribute(pCol,3));
+    pGeo.setAttribute('size', new THREE.BufferAttribute(pSize,1));
+
+    // sprite texture via canvas
+    function makeSprite(){
+      const s = 128;
+      const txCanvas = document.createElement('canvas');
+      txCanvas.width = txCanvas.height = s;
+      const ctx = txCanvas.getContext('2d');
+      const g = ctx.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+      g.addColorStop(0,'rgba(255,255,255,0.95)');
+      g.addColorStop(0.15,'rgba(255,240,200,0.95)');
+      g.addColorStop(0.35,'rgba(255,110,50,0.82)');
+      g.addColorStop(0.6,'rgba(40,40,40,0.28)');
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,s,s);
+      const tex = new THREE.CanvasTexture(txCanvas);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    const sprite = makeSprite();
+    const pMat = new THREE.PointsMaterial({
+      map: sprite, alphaTest: 0.01, transparent: true, depthWrite: false,
+      blending: THREE.AdditiveBlending, vertexColors: true, sizeAttenuation: true, color: 0xffffff
+    });
+
+    const particles = new THREE.Points(pGeo, pMat);
+    particles.frustumCulled = false;
+    particles.position.set(0, 0.1, 0);
+    scene.add(particles);
+
+    // ---------------- Postprocessing Bloom ----------------
+    const composer = new EffectComposer(renderer);
+    composer.setSize(window.innerWidth, window.innerHeight);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.9, 0.6, 0.12);
+    bloom.threshold = 0.12; bloom.strength = 0.9; bloom.radius = 0.6;
+    composer.addPass(bloom);
+
+    // Performance detection: lower settings on mobile
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+      renderer.setPixelRatio(1.0);
+      bloom.strength = 0.6; bloom.radius = 0.45;
+      document.getElementById('perfBadge').textContent = 'Performance: mobile';
+    } else {
+      document.getElementById('perfBadge').textContent = 'Performance: high';
+    }
+
+    // Resize handler
+    function onResize(){
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      composer.setSize(window.innerWidth, window.innerHeight);
+    }
+    window.addEventListener('resize', onResize, { passive:true });
+
+    // Animation loop
+    const clock = new THREE.Clock();
+    let t = 0;
+    function animate(){
+      const dt = clock.getDelta();
+      t += dt;
+
+      // breathing & bob
+      const bob = Math.sin(t * 1.2) * 0.02;
+      warrior.position.y = -0.06 + bob;
+      warrior.rotation.y = Math.sin(t * 0.18) * 0.04;
+
+      // emissive pulse
+      chestStrip.material.emissiveIntensity = 1.2 + Math.sin(t * 3.2) * 0.14;
+      visor.material.emissiveIntensity = 1.0 + Math.abs(Math.sin(t * 2.6)) * 0.7;
+      crest.material.emissiveIntensity = 0.9 + Math.abs(Math.cos(t * 1.7)) * 0.5;
+
+      // particles float up and respawn
+      const pos = pGeo.attributes.position.array;
+      const col = pGeo.attributes.customColor.array;
+      const sizes = pGeo.attributes.size.array;
+      for (let i=0;i<particleCount;i++){
+        const base = i*3;
+        pos[base+1] += dt * (0.08 + (i%6) * 0.008);
+        pos[base] += Math.sin(t * 0.64 + i) * 0.0009;
+        pos[base+2] += Math.cos(t * 0.42 + i) * 0.0007;
+        if (pos[base+1] > 1.9){
+          pos[base] = (Math.random()-0.5)*1.2;
+          pos[base+1] = -0.2 + Math.random() * 0.22;
+          pos[base+2] = (Math.random()-0.5)*0.5;
+        }
+        sizes[i] = sizes[i] * (0.997 + Math.sin(t * (0.9 + (i%3)*0.2) + i) * 0.0006);
+        const flick = 0.5 + Math.abs(Math.sin(t * (1.2 + (i % 4) * 0.2) + i));
+        col[base] = Math.min(1.0, col[base] * (0.92 + flick * 0.06));
+      }
+      pGeo.attributes.position.needsUpdate = true;
+      pGeo.attributes.size.needsUpdate = true;
+      pGeo.attributes.customColor.needsUpdate = true;
+
+      controls.update();
+      composer.render(dt);
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+
+    // ---------------- WebAudio: ambient + SFX ----------------
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioCtx();
+    let ambientStarted = false;
+    const audioState = { masterGain: null, nodes: null, muted: false };
+
+    function startAmbient(){
+      if (ambientStarted) return;
+      try {
+        // Master
+        const master = audioCtx.createGain();
+        master.gain.value = 0.06;
+        master.connect(audioCtx.destination);
+
+        // low pad
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine'; osc.frequency.value = 55;
+        const oscGain = audioCtx.createGain(); oscGain.gain.value = 0.16;
+        osc.connect(oscGain); oscGain.connect(master);
+
+        // LFO breathe
+        const lfo = audioCtx.createOscillator(); lfo.type='sine'; lfo.frequency.value = 0.07;
+        const lfoGain = audioCtx.createGain(); lfoGain.gain.value = 0.04;
+        lfo.connect(lfoGain); lfoGain.connect(oscGain.gain);
+
+        // noise layer
+        const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i=0;i<data.length;i++) data[i] = (Math.random() * 2 - 1) * 0.35;
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buf; noise.loop = true;
+        const nf = audioCtx.createBiquadFilter(); nf.type='bandpass'; nf.frequency.value = 1100; nf.Q.value = 0.9;
+        const nGain = audioCtx.createGain(); nGain.gain.value = 0.02;
+        noise.connect(nf); nf.connect(nGain); nGain.connect(master);
+
+        osc.start(); lfo.start(); noise.start();
+
+        audioState.masterGain = master;
+        audioState.nodes = { osc, lfo, noise };
+        ambientStarted = true;
+      } catch(e){
+        console.warn('Audio start failed', e);
+      }
+    }
+
+    function playPushSfx(){
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(0.8, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      g.connect(audioCtx.destination);
+
+      const o1 = audioCtx.createOscillator(); o1.type='sawtooth'; o1.frequency.setValueAtTime(220, now);
+      const o2 = audioCtx.createOscillator(); o2.type='square'; o2.frequency.setValueAtTime(440, now); o2.detune.value = 12;
+      const filter = audioCtx.createBiquadFilter(); filter.type='lowpass'; filter.frequency.setValueAtTime(1200, now);
+      filter.frequency.exponentialRampToValueAtTime(420, now + 0.35);
+
+      o1.connect(filter); o2.connect(filter); filter.connect(g);
+      o1.start(now); o2.start(now);
+      o1.stop(now + 0.45); o2.stop(now + 0.45);
+    }
+
+    // ---------------- UI interactions ----------------
+    const cta = document.getElementById('cta');
+    const demo = document.getElementById('demo');
+    const mute = document.getElementById('mute');
+
+    cta.addEventListener('click', async () => {
+      // resume audio on user gesture
+      if (audioCtx.state === 'suspended') {
+        try { await audioCtx.resume(); } catch(e) {}
+      }
+      startAmbient();
+      if (!audioState.muted) playPushSfx();
+
+      // small camera zoom + warrior flash
+      const start = { z: camera.position.z };
+      const targetZ = Math.max(2.6, camera.position.z - 1.1);
+      let t0 = 0;
+      const dur = 360;
+      const id = setInterval(()=>{
+        t0++;
+        const p = t0/dur;
+        camera.position.z = start.z * (1-p) + targetZ * p;
+        if (t0 >= dur){ clearInterval(id);
+          // restore
+          setTimeout(()=>{ // gentle return
+            const id2 = setInterval(()=>{
+              camera.position.z += 0.008;
+              if (camera.position.z >= 4.0){ clearInterval(id2); }
+            },16);
+          }, 900);
+        }
+      },16);
+
+      // small CTA pop
+      cta.animate([{transform:'scale(1)'},{transform:'scale(.96)'},{tra
